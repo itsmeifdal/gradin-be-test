@@ -36,7 +36,7 @@ Pilih endpoint, klik **Try it out**, isi parameter atau JSON, lalu klik
 ## Menjalankan automated test
 
 ```bash
-php artisan test
+php artisan test tests/Feature/CourierApiTest.php tests/Feature/SwaggerDocumentationTest.php
 ```
 
 Endpoint utama:
