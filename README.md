@@ -1,49 +1,47 @@
-# Courier API
+# Courier REST API
 
-Minimal Laravel REST API for managing courier master data. No frontend UI is required.
+REST API Laravel untuk CRUD master data kurir. Database menggunakan SQLite dan
+data awal tersedia melalui seeder.
 
-## Setup
+## Instalasi
+
+Pastikan PHP 8.3+, Composer, serta extension `pdo_sqlite` dan `sqlite3` aktif.
 
 ```bash
+git clone https://github.com/itsmeifdal/gradin-be-test.git
+cd gradin-be-test
 composer install
 cp .env.example .env
 php artisan key:generate
-php artisan migrate
+touch database/database.sqlite
+php artisan migrate:fresh --seed
+php artisan l5-swagger:generate
+```
+
+## Menjalankan aplikasi
+
+```bash
+php artisan serve
+```
+
+Buka Swagger UI:
+
+```text
+http://127.0.0.1:8000/api/documentation
+```
+
+Pilih endpoint, klik **Try it out**, isi parameter atau JSON, lalu klik
+**Execute**.
+
+## Menjalankan automated test
+
+```bash
 php artisan test
 ```
 
-## Endpoints
-
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/api/couriers` | Paginated courier list |
-| `POST` | `/api/couriers` | Create a courier |
-| `GET` | `/api/couriers/{courier}` | Show a courier |
-| `PUT` | `/api/couriers/{courier}` | Update a courier |
-| `DELETE` | `/api/couriers/{courier}` | Delete a courier |
-
-The index endpoint accepts these optional query parameters:
-
-- `search=budi agung`: case-insensitive name search; every word may match a different part of the name.
-- `level=2,3`: include only couriers at the listed levels.
-- `sort=registered_at`: sort by newest registration date. The default is `name` ascending.
-- `per_page=15`: items per page, from 1 to 100.
-
-Example:
+Endpoint utama:
 
 ```text
-GET /api/couriers?search=budi%20agung&level=2,3&sort=registered_at
+GET|POST             /api/couriers
+GET|PUT|PATCH|DELETE /api/couriers/{courier}
 ```
-
-Create and update payload:
-
-```json
-{
-  "name": "Budiono Hadi Agung",
-  "phone": "081234567890",
-  "level": 2,
-  "registered_at": "2026-11-01"
-}
-```
-
-`level` must be between 1 and 5, `phone` must be unique, and `registered_at` must use `YYYY-MM-DD`.
